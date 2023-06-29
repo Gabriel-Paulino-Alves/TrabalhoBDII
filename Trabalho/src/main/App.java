@@ -263,7 +263,7 @@ public class App {
                 	inserirCartaoAdd();
                 	break;
                 case 8:
-                	// efetuarTransação();
+                	efetuarTransação();
                 	break;
                 case 9:
                 	consultarIdCartao();
@@ -272,7 +272,7 @@ public class App {
                 	consultarCartaoAdd();
                 	break;
                 case 11:
-                	// listarTransações();
+                	consultarTransações();
                 	break;
                 case 12:
                 	Cartao c = consultarIdCartao();
