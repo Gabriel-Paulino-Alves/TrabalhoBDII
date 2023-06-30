@@ -12,7 +12,7 @@ public class Main {
 	public static void main(String[] args) {
 	//setando a Pessoa e o Cartao
 	Pessoa pessoa1 = new Pessoa("Gustavo","150.767.026-55");
-	Cartao cartao1 = new Cartao ("Amanda","155.762.025-77","10/26","xxxxxx");
+	Cartao cartao1 = new Cartao ("Amanda","155.762.025-77","10/26","xxxxxx",0,1);
 	
 	cartao1.setLimiteC(1700);// seta o limite total do cartao principal
 	cartao1.setLimiteDisp(cartao1.getLimiteC());// seta o limite disponivel do cartao principal
@@ -20,9 +20,9 @@ public class Main {
 	System.out.println("---------------------------------------------");
 	
 	//setando o cartao adicional
-	CartaoADD cartaoADD1 = new CartaoADD("Junior","xxxx","10/27","xxxxxx");
+	CartaoADD cartaoADD1 = new CartaoADD("Junior","xxxx","10/27","xxxxxx",0,1);
 	cartaoADD1.setnovoL(300,cartao1); //setando o limite do cartao adicional
-	CartaoADD cartaoADD2 = new CartaoADD("Pedro","xxxx","10/28","xxxxxx");
+	CartaoADD cartaoADD2 = new CartaoADD("Pedro","xxxx","10/28","xxxxxx",0,1);
 	cartaoADD2.setnovoL(400,cartao1); //setando o limite do cartao adicional
 	
 	//Inserindo a lista 
