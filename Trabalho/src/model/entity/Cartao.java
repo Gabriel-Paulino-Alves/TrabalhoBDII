@@ -5,8 +5,10 @@ import java.util.List;
 
 public class Cartao  extends Pessoa{
 
+private int idPessoa;
 private int idCartao;
-private String dataV,numeroC;
+protected String dataV;
+protected String numeroC;
 private double limiteC;
 private double limiteDisp=limiteC;
 private List<CartaoADD> cartoesAdicionais;
@@ -16,8 +18,11 @@ private List<CartaoADD> cartoesAdicionais;
 		
 	}
     //SUPERCONSTRUTORES
-	public Cartao(String nome, String cpf,String dataV,String numeroC) {
+	public Cartao(String nome, String cpf,String dataV,String numeroC, double limiteC,int idPessoa) {
 		super(nome,cpf);
+		this.limiteC = limiteC;
+		limiteDisp = limiteC;
+		this.idPessoa = idPessoa;
 		this.dataV=dataV;
 		this.numeroC=numeroC;
 		this.cartoesAdicionais = new LinkedList<>();
@@ -63,6 +68,12 @@ private List<CartaoADD> cartoesAdicionais;
 
 	public void setIdCartao(int idCartao) {
 		this.idCartao = idCartao;
+	}
+	public int getIdPessoa() {
+		return idPessoa;
+	}
+	public void setIdPessoa(int idPessoa) {
+		this.idPessoa = idPessoa;
 	}
 	
 	
