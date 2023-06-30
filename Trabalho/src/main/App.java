@@ -52,30 +52,41 @@ public class App {
         pessoaDAO.inserir(pessoa);        
     }
     public static void inserirCartao() {
+    	String nome = leString("digite o nome");
+    	String cpf = leString("digite o cpf");
     	String datav = leString("Digite a data validade");
         String numero = leString("Digite o numero");
         String limiteT = leString("Digite o limite total");
-        String limiteD = leString("Digite o limite disponivel");
-        Cartao cartao = new Cartao(datav,numero,limiteT,limiteD);
+        String id = leString("digite o id do titular");
+        int idP = Integer.parseInt(id);
+        //String limiteD = leString("Digite o limite disponivel");
+        double l = Double.parseDouble(limiteT);
+       // double ld = Double.parseDouble(limiteD);
+        Cartao cartao = new Cartao(nome,cpf,datav,numero,l,idP);
         CartaoDAO cartaoDAO = new CartaoDAO();
         cartaoDAO.inserirCartao(cartao);  
     }
     public static void inserirCartaoAdd() {
+    	String nome = leString("digite o nome");
+    	String cpf = leString("digite o cpf");
     	String datav = leString("Digite a data validade");
         String numero = leString("Digite o numero");
         String limiteT = leString("Digite o limite total");
-        String limiteD = leString("Digite o limite disponivel");
-        CartaoADD cartaoAdd = new CartaoADD(datav,numero,limiteT,limiteD);
+        //String limiteD = leString("Digite o limite disponivel");
+        String id = leString("Digite o id do cartao principal");
+        int idC = Integer.parseInt(id);
+        double l = Double.parseDouble(limiteT);
+        CartaoADD cartaoAdd = new CartaoADD(nome, cpf,datav,numero,l,idC);
         CartaoAddDAO cartaoAddDAO = new CartaoAddDAO();
         cartaoAddDAO.inserirCartaoAdd(cartaoAdd);
     }
-    public static void efetuarTransacao() {
-    	String valor = leString("Digite o valor");
-        String comercio = leString("Digite o comercio");
-        Transacao t = new Transacao(valor,comercio);
-        TransacaoDAO dao = new TransacaoDAO();
-        dao.inserir(t);  
-    }
+   // public static void efetuarTransacao() {
+    	//String valor = leString("Digite o valor");
+        //String comercio = leString("Digite o comercio");
+        //Transacao t = new Transacao(valor,comercio);
+        //TransacaoDAO dao = new TransacaoDAO();
+        //dao.inserir(t);  
+    //} 
     
     
     public static void metodoConsultarTodos() {;
@@ -98,17 +109,17 @@ public class App {
     public static Cartao consultarIdCartao() {
         String idStr = leString("Digite id");
         // converter de String para int
-        int id = Integer.parseInt(idStr);
+        int idCartao = Integer.parseInt(idStr);
         CartaoDAO dao = new CartaoDAO();
-        Cartao c = dao.consultarIdCartao(id);
+        Cartao c = dao.consultarIdCartao(idCartao);
         return c; 
     }
     public static CartaoADD consultarCartaoAdd() {
         String idStr = leString("Digite id");
         // converter de String para int
-        int id = Integer.parseInt(idStr);
+        int idCartaoAdd = Integer.parseInt(idStr);
         CartaoAddDAO dao = new CartaoAddDAO();
-        CartaoADD ca = dao.consultarIdCartaoAdd(id);
+        CartaoADD ca = dao.consultarIdCartaoAdd(idCartaoAdd);
         return ca; 
     	
     }
@@ -134,7 +145,7 @@ public class App {
         int id = Integer.parseInt(tmp); 
         PessoaDAO dao = new PessoaDAO();
         if (dao.excluir(id)){
-            JOptionPane.showMessageDialog(null, "Registro " +id + " exluido");
+            JOptionPane.showMessageDialog(null, "Registro " +id + " excluido");
         }else{
             JOptionPane.showMessageDialog(null, "Registro " +id + " nao existe");
         }
@@ -145,7 +156,7 @@ public class App {
         int id = Integer.parseInt(tmp); 
         CartaoDAO dao = new CartaoDAO();
         if (dao.excluirCartao(id)){
-            JOptionPane.showMessageDialog(null, "Registro " +id + " exluido");
+            JOptionPane.showMessageDialog(null, "Registro " +id + " excluido");
         }else{
             JOptionPane.showMessageDialog(null, "Registro " +id + " nao existe");
         }
@@ -155,7 +166,7 @@ public class App {
         int id = Integer.parseInt(tmp); 
         CartaoAddDAO dao = new CartaoAddDAO();
         if (dao.excluirCartaoAdd(id)){
-            JOptionPane.showMessageDialog(null, "Registro " +id + " exluido");
+            JOptionPane.showMessageDialog(null, "Registro " +id + " excluido");
         }else{
             JOptionPane.showMessageDialog(null, "Registro " +id + " nao existe");
         }
@@ -170,10 +181,10 @@ public class App {
     }
 
     public static void metodoAtualizar(Pessoa p) {
-        String nomeAntigo = p.getNome();
         String cpfAntigo = p.getCPF();
+        String nomeAntigo = p.getNome(); 
+        String novoCpf = leString("Alterar cpf: "+ cpfAntigo);
         String novoNome = leString("Alterar nome: "+ nomeAntigo);
-        String novoCpf = leString("Alterar email: "+ cpfAntigo);
         p.setCPF(novoCpf);
         p.setNome(novoNome);
         PessoaDAO dao = new PessoaDAO();
@@ -203,8 +214,8 @@ public class App {
     public static void atualizarCartaoAdd(CartaoADD ca) {
         String datav = ca.getDataV();
         String numero = ca.getNumeroC();
-        double limiteT = ca.getLimiteC();
-        double limiteD = ca.getLimiteDisp();
+        double limiteT = ca.getLimiteT();
+        double limiteD = ca.getLimiteD();
         String limitestr = Double.toString(limiteT);
         String limitedstr = Double.toString(limiteD);
         String novadata = leString("Alterar data: "+ datav);
@@ -215,8 +226,8 @@ public class App {
         double limiteND = Double.parseDouble(limiteDnovo);
         ca.setDataV(novadata);
         ca.setNumeroC(novonum);
-        ca.setLimiteC(limiteN);
-        ca.setLimiteDisp(limiteND);
+        ca.setLimiteT(limiteN);
+        ca.setLimiteD(limiteND);
         CartaoAddDAO dao = new CartaoAddDAO();
         dao.atualizar(ca);
     }
@@ -235,7 +246,7 @@ public class App {
                     Pessoa pess=metodoConsultarId();
                     String saida;
                     if (pess != null){
-                        saida = "id\tnome\temail\n";
+                        saida = "id\tnome\tcpf\n";
                         saida += pess.getId()+"\t";
                         saida = saida + pess.getCPF()+"\t";
                         saida += pess.getNome()+"\n"; 
@@ -263,16 +274,42 @@ public class App {
                 	inserirCartaoAdd();
                 	break;
                 case 8:
-                	efetuarTransação();
+                	System.out.println("ainda estamos trabalhando neste aqui");
                 	break;
                 case 9:
-                	consultarIdCartao();
+                	Cartao c1 = consultarIdCartao();
+                	String s;
+                    if (c1 != null){
+                        s = "id\tcpf\tnome\tdataV\tnumeroC\tlimiteT\tlimiteD\n";
+                        s += c1.getId()+"\t";
+                        s+= c1.getNome()+"\t";
+                        s+= c1.getCPF()+"\t";
+                        s = s + c1.getDataV()+"\t";
+                        s += c1.getNumeroC()+"\t"; 
+                        s += c1.getLimiteC()+"\t";
+                        s += c1.getLimiteDisp()+"\n";
+                    }else{
+                        s = "Registro nao foi localizado";
+                    }
+                    JOptionPane.showMessageDialog(null, new JTextArea(s));
                 	break;
                 case 10:
-                	consultarCartaoAdd();
+                	CartaoADD ca1 = consultarCartaoAdd();
+                	String ss;
+                	if(ca1 !=null) {
+                		ss = "id\tdataV\tnumeroC\tlimiteT\tlimiteD\n";
+                		ss += ca1.getId()+"\t";
+                        ss += ca1.getDataV()+"\t";
+                        ss += ca1.getNumeroC()+"\t"; 
+                        ss += ca1.getLimiteT()+"\t";
+                        ss += ca1.getLimiteD()+"\n";
+                	}else{
+                        ss = "Registro nao foi localizado";
+                    }
+                    JOptionPane.showMessageDialog(null, new JTextArea(ss));
                 	break;
                 case 11:
-                	consultarTransações();
+                	System.out.println("ainda estamos trabalhando neste aqui");
                 	break;
                 case 12:
                 	Cartao c = consultarIdCartao();
