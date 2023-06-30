@@ -5,7 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+
+import model.entity.Cartao;
 import model.entity.CartaoADD;
+import model.entity.Pessoa;
 
 public class CartaoAddDAO {
 
@@ -15,14 +18,16 @@ public class CartaoAddDAO {
 
 	public void inserirCartaoAdd(CartaoADD cartaoAdd) {
 		ConexaoBd con = new ConexaoBd();
-		String sql = "INSERT INTO cartaoAdd (dataValidade, limiteTotal, limiteDisponivel) VALUES (?,?,?)";
+		String sql = "INSERT INTO cartaoAdd (dataValidade,numeroCartao, limiteTotal, limiteDisponivel, idCartao) VALUES (?,?,?,?,?)";
 		try {
 			PreparedStatement pst = con.getConexao().prepareStatement(sql);
 			pst.setString(1, cartaoAdd.getDataV());
-            pst.setDouble(2, cartaoAdd.getLimiteC());
-            pst.setDouble(3, cartaoAdd.getLimiteDisp());
+			pst.setString(2, cartaoAdd.getNumeroC());
+            pst.setDouble(3, cartaoAdd.getLimiteT());
+            pst.setDouble(4, cartaoAdd.getLimiteD());
+            pst.setInt(5, cartaoAdd.getIdCartao());
             pst.execute();
-            System.out.println("Cartao principal inserido");
+            System.out.println("Cartao adicional inserido");
 		} catch (SQLException e){
             System.out.println(e.getMessage());
         }	
@@ -37,12 +42,19 @@ public class CartaoAddDAO {
             pst.setInt(1, idCartaoAdd);
             ResultSet rs =  pst.executeQuery();
             if (rs.next()){
+            	//String nome = rs.getString("nome");
+            	//String cpf = rs.getString("cpf");
                 String dataV = rs.getString("dataValidade");
-                String numero = rs.getString("numero cartao");
+                String numero = rs.getString("numeroCartao");
                 String limiteTotal = rs.getString("limiteTotal");
-                String limiteDisponivel = rs.getString("limiteDisponivel");
-                ca = new CartaoADD(dataV,numero,limiteTotal, limiteDisponivel);
-                ca.setId(rs.getInt("id Cartao"));
+                //String limiteDisponivel = rs.getString("limiteDisponivel");
+                String id = rs.getString("idCartao");
+                int idC = Integer.parseInt(id);
+                CartaoDAO dao = new CartaoDAO();
+                Cartao c = dao.consultarIdCartao(idC);
+                double l = Double.parseDouble(limiteTotal);
+                ca = new CartaoADD(c.getNome(), c.getCPF(),dataV,numero,l,idC);
+                ca.setId(rs.getInt("idCartaoAdd"));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -79,7 +91,7 @@ public class CartaoAddDAO {
     }
 	
 	public boolean excluirCartaoAdd(int chave){
-        String sql = "DELETE FROM cartaoAdd WHERE id = ?";
+        String sql = "DELETE FROM cartaoAdd WHERE idCartaoAdd = ?";
         try{
         	ConexaoBd conexao = new ConexaoBd();
             PreparedStatement pst = conexao.getConexao().prepareStatement(sql);
@@ -95,13 +107,13 @@ public class CartaoAddDAO {
 	
 	public boolean atualizar(CartaoADD cartaoAdd){
         try {
-            String sql = "UPDATE cartaoAdd SET dataValidade = ?, numeroCartao = ?, limiteTotal = ?, limiteDisponivel = ? WHERE id = ?";
+            String sql = "UPDATE cartaoAdd SET dataValidade = ?, numeroCartao = ?, limiteTotal = ?, limiteDisponivel = ? WHERE idCartaoAdd = ?";
             ConexaoBd conexao = new ConexaoBd();
             PreparedStatement pst = conexao.getConexao().prepareStatement(sql);
             pst.setString(1, cartaoAdd.getDataV());
             pst.setString(2, cartaoAdd.getNumeroC());
-            pst.setDouble(3, cartaoAdd.getLimiteC());
-            pst.setDouble(4, cartaoAdd.getLimiteDisp());
+            pst.setDouble(3, cartaoAdd.getLimiteT());
+            pst.setDouble(4, cartaoAdd.getLimiteD());
             pst.setInt(5, cartaoAdd.getId());
             int linhas = pst.executeUpdate();
             return linhas>0;            
